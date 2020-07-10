@@ -6,10 +6,10 @@ from .models import Board
 
 def home(request):
     boards = Board.objects.all()
-    return render(request, 'boards_index.html', {'boards': boards})
+    return render(request, 'boards/boards_index.html', {'boards': boards})
 
 
 def board_topics(request, pk):
     board = get_object_or_404(Board, pk=pk)
-    return render(request, 'topics.html', {'board': board})
+    return render(request, 'boards/topics.html', {'board': board})
 
