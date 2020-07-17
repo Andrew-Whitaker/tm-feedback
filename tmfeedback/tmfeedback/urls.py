@@ -18,9 +18,11 @@ from django.urls import path, include
 from django.conf.urls import url
 
 from homepage import views
+from users import views as users_views
 
 urlpatterns = [
     url(r'^$', views.home, name='home'),
+    url(r'^signup/$', users_views.signup, name='signup'),
     url(r'^about/$', views.about, name='about'),
     path('boards/', include('boards.urls')),
     path('clubs/', include('clubs.urls')),

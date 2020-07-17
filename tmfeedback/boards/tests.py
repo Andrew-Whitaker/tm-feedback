@@ -10,7 +10,7 @@ from .forms import NewTopicForm
 class HomeTests(TestCase):
     def setUp(self):
         self.board = Board.objects.create(name='Test', description='Test board')
-        url = reverse('home')
+        url = reverse('boards_index')
         self.response = self.client.get(url)
 
     def test_home_view_status_code(self):
@@ -45,7 +45,7 @@ class BoardTopicsTests(TestCase):
 
     def test_board_topics_view_contains_navigation_links(self):
         board_topics_url = reverse('board_topics', kwargs={'pk': 1})
-        homepage_url = reverse('home')
+        homepage_url = reverse('boards_index')
         new_topic_url = reverse('new_topic', kwargs={'pk': 1})
 
         response = self.client.get(board_topics_url)
