@@ -6,7 +6,7 @@ from .models import Board, Topic, Post
 from .forms import NewTopicForm
 
 
-def home(request):
+def boards_index(request):
     boards = Board.objects.all()
     return render(request, 'boards/boards_index.html', {'boards': boards})
 

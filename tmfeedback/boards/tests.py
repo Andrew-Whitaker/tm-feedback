@@ -2,7 +2,7 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth import get_user_model
 
-from .views import home, board_topics, new_topic
+from .views import boards_index, board_topics, new_topic
 from .models import Board, Topic, Post
 from .forms import NewTopicForm
 
@@ -18,7 +18,7 @@ class HomeTests(TestCase):
 
     def test_home_url_resolves_home_view(self):
         view = resolve('/boards/')
-        self.assertEquals(view.func, home)
+        self.assertEquals(view.func, boards_index)
 
     def test_home_view_contains_link_to_topics_page(self):
         board_topics_url = reverse('board_topics', kwargs={'pk': self.board.pk})
