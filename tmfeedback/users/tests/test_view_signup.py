@@ -2,8 +2,8 @@ from django.test import TestCase
 from django.urls import reverse, resolve
 from django.contrib.auth import get_user_model
 
-from .forms import SignUpForm
-from .views import signup
+from ..forms import SignUpForm
+from ..views import signup
 
 
 class SignUpTests(TestCase):

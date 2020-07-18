@@ -1,0 +1,16 @@
+body {
+    background-image: url(../img/xv.png);
+}
+
+.logo {
+    font-family: 'Ubuntu', sans-serif;
+}
+
+.logo a {
+    color: rbga(0,0,0,.9);
+}
+
+.logo a:hover,
+.logo a:active {
+    text-decoration: none;
+}
