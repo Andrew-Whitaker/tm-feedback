@@ -18,21 +18,20 @@ class BoardIndexView(ListView):
     template_name = 'boards/boards_index.html'
 
 
-def board_topics(request, pk):
-    board = get_object_or_404(Board, pk=pk)
-    queryset = board.topics.order_by('-last_update').annotate(replies=Count('posts') - 1)
-    page = request.GET.get('page', 1)
+class TopicListView(ListView):
+    model = Topic
+    context_object_name = 'topics'
+    template_name = 'boards/topics.html'
+    paginate_by = 13
 
-    paginator = Paginator(queryset, 12)
+    def get_context_data(self, **kwargs):
+        kwargs['board'] = self.board
+        return super().get_context_data(**kwargs)
 
-    try:
-        topics = paginator.page(page)
-    except PageNotAnInteger:
-        topics = paginator.page(1)
-    except EmptyPage:
-        topics = paginator.page(paginator.num_pages)
-
-    return render(request, 'boards/topics.html', {'board': board, 'topics': topics})
+    def get_queryset(self):
+        self.board = get_object_or_404(Board, pk=self.kwargs.get('pk'))
+        queryset = self.board.topics.order_by('-last_update').annotate(replies=Count('posts') - 1)
+        return queryset
 
 
 @login_required
