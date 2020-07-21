@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item active">Clubs</li>
+{% endblock %}
+
+{% block content %}
+  <table class="table">
+    <thead class="thead-inverse">
+      <tr>
+        <th>Club Name</th>
+        <th>Club ID</th>
+        <th>Registered Members</th>
+        <th>Organizer</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for club in clubs %}
+        <tr>
+          <td>
+            <a href="#">{{ club.name }}</a>
+          </td>
+          <td class="align-middle">{{ club.pk }}</td>
+          <td class="align-middle">{{ club.member_count }}</td>
+          <td class="align-middle">{{ club.organizer.get_full_name }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
