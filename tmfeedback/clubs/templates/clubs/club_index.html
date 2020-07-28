@@ -18,7 +18,7 @@
       {% for club in clubs %}
         <tr>
           <td>
-            <a href="#">{{ club.name }}</a>
+            <a href="{% url 'club_home' club.pk %}">{{ club.name }}</a>
           </td>
           <td class="align-middle">{{ club.pk }}</td>
           <td class="align-middle">{{ club.member_count }}</td>

@@ -9,7 +9,7 @@ from ..models import Club
 class ClubIndexTests(TestCase):
     def setUp(self):
         user = get_user_model().objects.create(username='john', password='12345678')
-        self.board = Club.objects.create(name='Test', description='Test board', organizer=user)
+        self.club = Club.objects.create(name='Test', id=1, description='Test board', organizer=user)
         url = reverse('club_index')
         self.response = self.client.get(url)
 
@@ -20,6 +20,6 @@ class ClubIndexTests(TestCase):
         view = resolve('/clubs/')
         self.assertEquals(view.func.view_class, ClubIndexView)
 
-    # def test_boards_index_view_contains_link_to_topics_page(self):
-    #     board_topics_url = reverse('board_topics', kwargs={'pk': self.board.pk})
-    #     self.assertContains(self.response, 'href="{0}"'.format(board_topics_url))
+    def test_club_index_view_contains_nav_links(self):
+        club_url = reverse('club_home', kwargs={'club_id': self.club.id})
+        self.assertContains(self.response, 'href="{0}"'.format(club_url))
