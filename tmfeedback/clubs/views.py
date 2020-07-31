@@ -1,8 +1,10 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, View
+from django.views.generic import ListView, View, FormView, DetailView
+from django.views.generic.list import MultipleObjectMixin
+from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth import get_user_model
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import formset_factory
 import sys
 
@@ -65,27 +67,41 @@ class ClubMemberRoster(LoginRequiredMixin, ListView):
         return queryset
 
 
-class ClubManageRequestsView(LoginRequiredMixin, View):
+class ClubOrganizerPermissionRequiredMixin(UserPassesTestMixin):
+    """ Mixin that enforces the request's user be the organizer for a particular club.
+    This mixin assumes that:
+        1) kwargs is a member variable of self
+        2) the key 'club_id' exists in kwargs
+        3) request is a member variable of self
+    Should always be used after LoginRequiredMixin.
+    """
+    def test_func(self):
+        club_id = self.kwargs['club_id']
+        user = self.request.user
+        return Club.objects.filter(id=club_id, organizer=user).exists()
+
+
+class ClubManageRequestsView(LoginRequiredMixin, ClubOrganizerPermissionRequiredMixin, View):
 
     def get(self, request, club_id):
         club = get_object_or_404(Club, pk=club_id)
         requesters = get_user_model().objects.filter(pending_clubs__pk=club_id)
-        request_count = requesters.count()
-        formset = create_membership_request_formset(request_count)()
+        requesters = requesters.order_by('first_name')
+        formset = create_membership_request_formset(requesters.count())()
 
         request_forms = zip(formset, requesters)
         context = {'form_requests': request_forms,
                    'club': club,
                    'formset': formset,
-                   'request_count': request_count
+                   'request_count': requesters.count()
                    }
-        return render(request, 'clubs/club_manage_requests.html', context)
+        return render(request, 'clubs/club_membership_requests.html', context)
 
-    def post(self, request, club_id, **kwargs):
+    def post(self, request, club_id):
         club = get_object_or_404(Club, pk=club_id)
         requesters = get_user_model().objects.filter(pending_clubs__pk=club_id)
-        request_count = requesters.count()
-        formset = create_membership_request_formset(request_count)(request.POST)
+        requesters = requesters.order_by('first_name')
+        formset = create_membership_request_formset(requesters.count())(request.POST)
 
         for form, user in zip(formset, requesters):
             if form.is_valid():
@@ -106,15 +122,63 @@ class ClubManageRequestsView(LoginRequiredMixin, View):
                 club.membership_requests.remove(user)
                 club.save()
         return
-        # request_count = int(request.context['request_count'])
-        #
-        # formset = create_membership_request_formset(request_count)(request.POST)
-        # for
-        #     clean_data = formset.cle
-        #
 
 
-
+# class ClubMembershipRequestDisplay(LoginRequiredMixin, ClubOrganizerPermissionRequiredMixin, DetailView):
+#     model = Club
+#     pk_url_kwarg = 'club_id'
+#     context_object_name = 'club'
+#     template_name = 'clubs/club_membership_requests.html'
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#
+#         requesters = self.object.membership_requests.all()
+#         requesters = requesters.order_by('first_name')
+#         formset = create_membership_request_formset(requesters.count())()
+#
+#         context['formset'] = formset
+#         context['form_requests'] = zip(formset, requesters)
+#
+#         return context
+#
+#
+# class ClubMembershipRequestApproval(LoginRequiredMixin,
+#         ClubOrganizerPermissionRequiredMixin, SingleObjectMixin, FormView):
+#     form_class = create_membership_request_formset(1)
+#     model = Club
+#     pk_url_kwarg = 'club_id'
+#     context_object_name = 'club'
+#     template_name = 'clubs/club_membership_requests.html'
+#
+#     def post(self, request, *args, **kwargs):
+#
+#
+#         return super().post(request, *args, **kwargs)
+#
+#     def get_context_data(self, **kwargs):
+#         context = super().get_context_data(**kwargs)
+#
+#         requesters = self.object.membership_requests.all()
+#         requesters = requesters.order_by('first_name')
+#         formset = create_membership_request_formset(requesters.count())(self.request.POST)
+#
+#         context['formset'] = formset
+#         context['form_requests'] = zip(formset, requesters)
+#
+#         return context
+#
+#     def get_success_url(self):
+#
+# class ClubManageMembershipRequests(LoginRequiredMixin, View):
+#
+#     def get(self, request, *args, **kwargs):
+#         view = ClubMembershipRequestDisplay.as_view()
+#         return view(request, *args, **kwargs)
+#
+#     def post(self, request, *args, **kwargs):
+#         view = ClubMembershipRequestApproval.as_view()
+#         return view(request, *args, **kwargs)
 
 
 
