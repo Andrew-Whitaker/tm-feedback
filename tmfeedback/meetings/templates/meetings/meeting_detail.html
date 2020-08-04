@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  {{meeting}}
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
+  <li class="breadcrumb-item active">Meeting: {{meeting}}</li>
+{% endblock %}
+
+{% block content %}
+
+  <div class="row">
+    <div class="col-md-12">Performances</div>
+  </div>
+  <div class="row">
+    <div class="col-md-4">Other stuff</div>
+  </div>
+
+{% endblock %}
