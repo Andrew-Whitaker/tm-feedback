@@ -9,6 +9,7 @@
 {% block breadcrumb %}
   <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
   <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">Meetings</a></li>
   <li class="breadcrumb-item active">New Meeting</li>
 {% endblock %}
 
