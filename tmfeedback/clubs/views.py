@@ -90,7 +90,7 @@ class ClubMemberPermissionRequiredMixin(UserPassesTestMixin):
     Should always be used after LoginRequiredMixin.
     """
     def test_func(self):
-        club = Club.objects.get(self.kwargs['club_id'])
+        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
         user = self.request.user
         return club.has_member(user)
 

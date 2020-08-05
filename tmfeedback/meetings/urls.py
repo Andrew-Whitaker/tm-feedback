@@ -7,8 +7,8 @@ from meetings import views
 
 urlpatterns = [
     path('', views.MeetingListView.as_view(), name='meeting_list'),
-    # path('create/', views.MeetingCreateView.as_view(), name='meeting_create'),
-    path('<int:meeting_pk>/', views.MeetingDetailView.as_view(), name='meeting-detail'),
+    path('create/', views.MeetingCreateView.as_view(), name='meeting_create'),
+    path('<int:meeting_pk>/', views.MeetingDetailView.as_view(), name='meeting_detail'),
     # path('<int:meeting_pk>/update/', views.MeetingUpdateView.as_view(), name='meeting_update'),
     # path('<int:meeting_pk>/delete/', views.MeetingDeleteView.as_view(), name='meeting_delete'),
 ]
