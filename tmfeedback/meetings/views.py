@@ -17,7 +17,7 @@ class MeetingListView(ListView):
 
     def get_queryset(self):
         self.club = get_object_or_404(Club, pk=self.kwargs.get('club_id'))
-        queryset = self.club.meetings.order_by('date')
+        queryset = self.club.meetings.order_by('-date')
         return queryset
 
     def get_context_data(self, **kwargs):
