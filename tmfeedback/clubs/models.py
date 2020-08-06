@@ -20,3 +20,7 @@ class Club(models.Model):
 
     def has_pending_member(self, user):
         return self.membership_requests.filter(pk=user.pk).exists()
+
+    def add_member(self, user):
+        self.members.add(user)
+        return
