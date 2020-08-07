@@ -1,5 +1,7 @@
 from django import forms
 
+from .models import Club
+
 
 class MembershipRequestForm(forms.Form):
     pass
@@ -13,3 +15,8 @@ class MembershipApprovalForm(forms.Form):
 def create_membership_request_formset(form_count):
     return forms.formset_factory(MembershipApprovalForm, extra=form_count)
 
+
+class ClubModelForm(forms.ModelForm):
+    class Meta:
+        model = Club
+        fields = ['name', 'id', 'description']

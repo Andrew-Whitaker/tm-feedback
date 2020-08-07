@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.urls import reverse
 
 
 class Club(models.Model):
@@ -22,5 +23,11 @@ class Club(models.Model):
         return self.membership_requests.filter(pk=user.pk).exists()
 
     def add_member(self, user):
+        assert user.is_authenticated, 'Attempting to add an unauthenticated User as a club member.'
         self.members.add(user)
+        self.member_count += 1
         return
+
+    def get_absolute_url(self):
+        kwargs = {'club_id': self.id}
+        return reverse('club_home', kwargs=kwargs)
