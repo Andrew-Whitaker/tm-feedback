@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+
+{% block title %}
+  {{ club.name }} - Manage Membership Requests
+{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
+    <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
+    <li class="breadcrumb-item active">Membership Requests</li>
+{% endblock %}
+
+{% block content %}
+    {% if request_count > 0 %}
+        <form method="post" novalidate>
+            {% csrf_token %}
+            {{ formset.management_form }}
+            <table class="table mb-4">
+                <thead class="thead-inverse">
+                    <tr>
+                        <th>User</th>
+                        <th>Email</th>
+                        <th>Club ID</th>
+                        <th>Decision</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for form, user in form_requests %}
+                        <tr>
+                            <td><a href="#">{{ user.get_full_name }}</a></td>
+                            <td>{{ user.email }}</td>
+                            <td>{{ club.id }}</td>
+                            <td>
+                                {% for radio in form.request_decision %}
+                                    <div class="my_radio">
+                                        {{ radio }}
+                                    </div>
+                                {% endfor %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <button type="submit" class="btn btn-success">Submit Updates</button>
+        </form>
+    {% else %}
+        <p>There are no requests to approve.</p>
+    {% endif %}
+{% endblock %}
