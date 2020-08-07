@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
-from django.views.generic import ListView, View, FormView, DetailView
+from django.views.generic import ListView, View, FormView, DetailView, TemplateView
 from django.views.generic.list import MultipleObjectMixin
 from django.views.generic.detail import SingleObjectMixin
 from django.contrib.auth import get_user_model
@@ -9,7 +9,7 @@ from django.forms import formset_factory
 import sys
 
 from .models import Club
-from .forms import MembershipRequestForm, MembershipApprovalForm, create_membership_request_formset
+from .forms import MembershipRequestForm, MembershipApprovalForm, create_membership_request_formset, ClubModelForm
 
 
 class ClubIndexView(ListView):
@@ -48,6 +48,41 @@ class ClubHomeView(View):
             return redirect('club_home', club_id=club_id)
         else:
             return redirect('club_index')
+
+
+class ClubCreateView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+        view = ClubCreationDisplay.as_view()
+        return view(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        view = ClubCreationSubmission.as_view()
+        return view(request, *args, **kwargs)
+
+
+class ClubCreationDisplay(TemplateView):
+    template_name = 'clubs/club_create.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = ClubModelForm()
+        return context
+
+
+class ClubCreationSubmission(TemplateView):
+    template_name = 'clubs/club_create.html'
+
+    def post(self, request):
+        form = ClubModelForm(request.POST)
+        if form.is_valid():
+            new_club = form.save(commit=False)
+            new_club.organizer = request.user
+            new_club.save()
+            new_club.add_member(request.user)
+            return redirect('club_home', club_id=new_club.id)
+        else:
+            return render(request, 'clubs/club_create.html', {'form': form})
 
 
 class ClubMemberRoster(LoginRequiredMixin, ListView):

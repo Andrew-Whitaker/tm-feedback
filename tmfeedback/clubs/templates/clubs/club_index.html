@@ -5,6 +5,13 @@
 {% endblock %}
 
 {% block content %}
+  <div class="row row-no-gutters">
+    <div class="col-md-2"><p>Don't see your club?</p></div>
+    <div class="col-md-1">
+      <a href="{% url 'club_create' %}" class="btn btn-primary">Register Here</a>
+    </div>
+  </div>
+
   <table class="table">
     <thead class="thead-inverse">
       <tr>
