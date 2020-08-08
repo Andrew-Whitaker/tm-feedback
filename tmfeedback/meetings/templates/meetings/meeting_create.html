@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Create a New Meeting
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">Meetings</a></li>
+  <li class="breadcrumb-item active">New Meeting</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Create Meeting</button>
+  </form>
+{% endblock %}
