@@ -3,7 +3,7 @@ from django.views.generic import ListView, CreateView, DetailView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 import sys
 
-from .models import Meeting
+from .models import Meeting, Performance
 from .forms import MeetingCreationForm
 from clubs.models import Club
 from clubs.views import ClubMemberPermissionRequiredMixin, ClubOrganizerPermissionRequiredMixin
@@ -58,5 +58,22 @@ class MeetingCreateView(LoginRequiredMixin, ClubMemberPermissionRequiredMixin, C
         form.instance.club = self.club
         return super().form_valid(form)
 
+
+class PerformanceDetailView(DetailView):
+    template_name = 'meetings/performance_detail.html'
+    context_object_name = 'performance'
+
+    def get_object(self):
+        perf_pk = self.kwargs.get('perf_pk')
+        return get_object_or_404(Performance, pk=perf_pk)
+
+    def get_context_data(self, **kwargs):
+        club_id = self.kwargs.get('club_id')
+        meeting_pk = self.kwargs.get('meeting_pk')
+
+        context = super().get_context_data(**kwargs)
+        context['club'] = get_object_or_404(Club, id=club_id)
+        context['meeting'] = get_object_or_404(Meeting, pk=meeting_pk)
+        return context
 
 
