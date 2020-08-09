@@ -54,29 +54,28 @@
     </div>
     <div class="row">
         <div class="col-md-6">
-            <div class="card w-50" style="margin-top:25px">
-                <div class="card-header text-white bg-dark">Club Meetings</div>
-                <div class="card-body">
-                    <h3>August</h3>
-                    <p>
-                        Meeting 1 <br>
-                        Meeting 2 <br>
-                        Meeting 3 <br>
-                        Meeting 4
-                    </p>
-                </div>
-                <div class="card-body">
-                    <h3>July</h3>
-                    <p>
-                        Meeting 1 <br>
-                        Meeting 2 <br>
-                        Meeting 3 <br>
-                        Meeting 4
-                    </p>
-                </div>
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Club Meetings</h4>
+                <table class="table">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Meeting</th>
+                            <th>Evaluations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meeting in meetings %}
+                            <tr>
+                                <td class="align-middle"><a href="{% url 'meeting_detail' club.id meeting.pk %}">{{ meeting }}</a></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 <div class="card-footer">
-                    <p>Don't see your meeting?</p>
-                    <a href="{% url 'meeting_list' club.id %}">All meetings</a>
+                    <p><a href="{% url 'meeting_list' club.id %}">Go to all meetings</a> or
+                        <a href="{% url 'meeting_create' club.id %}">Create a new meeting</a></p>
+
                 </div>
             </div>
 

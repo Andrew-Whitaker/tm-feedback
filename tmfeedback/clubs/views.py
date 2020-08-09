@@ -7,6 +7,7 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.forms import formset_factory
 import sys
+from datetime import date
 
 from .models import Club
 from .forms import MembershipRequestForm, MembershipApprovalForm, create_membership_request_formset, ClubModelForm
@@ -23,20 +24,18 @@ class ClubHomeView(View):
     def get(request, club_id):
         club = get_object_or_404(Club, pk=club_id)
         user = request.user
+        context = {
+            'club': club,
+            'meetings': club.get_meetings_from_last_n_weeks(8, date=date(2020, 8, 11))
+        }
         if user.is_authenticated:
-            context = {
-                'club': club,
-                'is_member': club.has_member(user),
-                'has_pending_membership': club.has_pending_member(user)
-            }
-            return render(request, 'clubs/club_home.html', context)
+            context['is_member'] = club.has_member(user)
+            context['has_pending_membership'] = club.has_pending_member(user)
         else:
-            context = {
-                'club': club,
-                'is_member': False,
-                'has_pending_membership': False
-            }
-            return render(request, 'clubs/club_home.html', context)
+            context['is_member'] = False
+            context['is_member'] = False
+
+        return render(request, 'clubs/club_home.html', context)
 
     def post(self, request, club_id):
         form = MembershipRequestForm(request.POST)
