@@ -15,6 +15,18 @@
     <div class="row">
         <img src="{% static 'img/tm_red_banner.png' %}" class="img-responsive" alt="Responsive img">
     </div>
+    <div class="card w-75" style="margin-top:35px;">
+        <div class="card-body">
+            Welcome to the {{club.name}} evaluation homepage. Here, you'll find and give constructive
+            feedback to your fellow club members.
+        </div>
+    </div>
+    <div class="card w-50" style="margin-top:25px">
+        <div class="card-header text-white bg-dark">Evaluation Quotes</div>
+        <div class="card-body">
+            This is where quote stuff goes.
+        </div>
+    </div>
     <div class="row">
         <div class="col-md-8">{{club.name}}</div>
         <div class="col-md-4">
@@ -41,6 +53,45 @@
         <div class="col-md-4">Organizer: {{club.organizer.get_full_name}}</div>
     </div>
     <div class="row">
-        <a href="{% url 'meeting_list' club.id %}">Meetings</a>
+        <div class="col-md-6">
+            <div class="card w-50" style="margin-top:25px">
+                <div class="card-header text-white bg-dark">Club Meetings</div>
+                <div class="card-body">
+                    <h3>August</h3>
+                    <p>
+                        Meeting 1 <br>
+                        Meeting 2 <br>
+                        Meeting 3 <br>
+                        Meeting 4
+                    </p>
+                </div>
+                <div class="card-body">
+                    <h3>July</h3>
+                    <p>
+                        Meeting 1 <br>
+                        Meeting 2 <br>
+                        Meeting 3 <br>
+                        Meeting 4
+                    </p>
+                </div>
+                <div class="card-footer">
+                    <p>Don't see your meeting?</p>
+                    <a href="{% url 'meeting_list' club.id %}">All meetings</a>
+                </div>
+            </div>
+
+        </div>
+        <div class="col-md-6">
+            <div class="card w-50" style="margin-top:25px">
+                <div class="card-header text-white bg-dark">Club Members</div>
+                <div class="card-body">
+                    Andrew Whitaker
+                    Kayla Seamons
+                </div>
+                <div class="card-footer">
+                    <p>Don't see your meeting?</p>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}
