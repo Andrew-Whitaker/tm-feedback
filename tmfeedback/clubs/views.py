@@ -26,7 +26,8 @@ class ClubHomeView(View):
         user = request.user
         context = {
             'club': club,
-            'meetings': club.get_meetings_from_last_n_weeks(8, date=date(2020, 8, 11))
+            'meetings': club.get_meetings_from_last_n_weeks(8, date=date(2020, 8, 11)),
+            'members': club.get_roster()
         }
         if user.is_authenticated:
             context['is_member'] = club.has_member(user)

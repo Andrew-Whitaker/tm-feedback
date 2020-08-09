@@ -70,6 +70,14 @@ class Club(models.Model):
         meeting_query_set = meeting_query_set.order_by('-date')
         return meeting_query_set
 
+    def get_roster(self):
+        """
+        Get the list of members in a club.
+
+        :return: Django Queryset of the members in a club.
+        """
+        members = self.members.order_by('last_name')
+        return members
 
 
 

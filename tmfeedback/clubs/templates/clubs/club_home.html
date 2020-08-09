@@ -75,20 +75,32 @@
                 <div class="card-footer">
                     <p><a href="{% url 'meeting_list' club.id %}">Go to all meetings</a> or
                         <a href="{% url 'meeting_create' club.id %}">Create a new meeting</a></p>
-
                 </div>
             </div>
-
         </div>
         <div class="col-md-6">
-            <div class="card w-50" style="margin-top:25px">
-                <div class="card-header text-white bg-dark">Club Members</div>
-                <div class="card-body">
-                    Andrew Whitaker
-                    Kayla Seamons
-                </div>
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Members</h4>
+                <table class="table">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Member</th>
+                            <th>Performances</th>
+                            <th>Evaluations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                            <tr>
+                                <td class="align-middle"><a href="#">{{ member.get_full_name }}</a></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
                 <div class="card-footer">
-                    <p>Don't see your meeting?</p>
+                    <p><a href="{% url 'club_member_roster' club.id %}">See full roster</a></p>
                 </div>
             </div>
         </div>
