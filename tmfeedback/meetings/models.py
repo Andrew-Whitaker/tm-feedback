@@ -31,7 +31,8 @@ def get_default_user():
 class Performance(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='performances')
     performer = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                  on_delete=models.SET(get_default_user))
+                                  on_delete=models.SET(get_default_user),
+                                  related_name='performances')
 
     # Performance Roles
     class Role(models.TextChoices):
