@@ -14,7 +14,7 @@ class Meeting(models.Model):
     club = models.ForeignKey(Club, on_delete=models.CASCADE, related_name='meetings')
 
     def __str__(self):
-        return self.theme + ' - ' + dt.strftime(self.date, "%b %d, %Y")
+        return dt.strftime(self.date, "%b %d, %Y") + ' - ' + self.theme
 
     def get_absolute_url(self):
         kwargs = {

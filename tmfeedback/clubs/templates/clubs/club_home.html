@@ -12,35 +12,120 @@
 {% endblock %}
 
 {% block content %}
+
     <div class="row">
-        <img src="{% static 'img/tm_red_banner.png' %}" class="img-responsive" alt="Responsive img">
+        <div class="card mb-3">
+            <img class="card-img-top" src="{% static 'img/tm_red_banner.png' %}" alt="card club banner image">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 class="card-title">{{club.name}}</h2>
+                        <h6 class="card-subtitle mb-2 text-muted">Club: {{club.id}}</h6>
+                    </div>
+                    <div class="col-md-4">
+                        {% if user.is_authenticated %}
+                            {% if is_member %}
+                                <button type="button" class="btn btn-success float-right" disabled>Member</button>
+                            {% elif has_pending_membership %}
+                                <button type="button" class="btn btn-info float-right" disabled>Pending Approval</button>
+                            {% else %}
+                                <form action="{% url 'club_home' club.id %}" method="post" class="form-inline ml-auto">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-primary float-right">Request Membership</button>
+                                </form>
+                            {% endif %}
+                        {% else %}
+                            <button type="button" class="btn btn-primary" disabled>Login to Join</button>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    <div class="row">
-        <div class="col-md-8">{{club.name}}</div>
-        <div class="col-md-4">
-            {% if user.is_authenticated %}
-                {% if is_member %}
-                    <button type="button" class="btn btn-success" disabled>Member</button>
-                {% elif has_pending_membership %}
-                    <button type="button" class="btn btn-info" disabled>Pending Approval</button>
-                {% else %}
-                    <form action="{% url 'club_home' club.id %}" method="post" class="form-inline ml-auto">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-primary">Request Membership</button>
-                    </form>
-                {% endif %}
-            {% else %}
-                <button type="button" class="btn btn-primary" disabled>Login to Join</button>
-            {% endif %}
+    <div class="card" style="margin-top:35px;">
+        <div class="card-body">
+            <p>Preset Message: Welcome to the {{club.name}} evaluation homepage. Here, you'll find and give constructive
+                feedback to your fellow club members.</p>
+            <p>User Defined Message: {{club.description}}</p>
+        </div>
+    </div>
+    <div class="card w-75 text-center" style="margin:auto; margin-top:25px">
+        <h4 class="card-header text-white bg-dark">Evaluation Quotes</h4>
+        <div class="card-body">
+            This is where quote stuff goes.
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12">{{club.description}}</div>
+        <div class="col-md-6">
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Club Meetings</h4>
+                <table class="table">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Meeting</th>
+                            <th>Evaluations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for meeting in meetings %}
+                            <tr>
+                                <td class="align-middle"><a href="{% url 'meeting_detail' club.id meeting.pk %}">{{ meeting }}</a></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="card-footer">
+                    <p><a href="{% url 'meeting_list' club.id %}">Go to all meetings</a> or
+                        <a href="{% url 'meeting_create' club.id %}">Create a new meeting</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Members</h4>
+                <table class="table">
+                    <thead class="thead-inverse">
+                        <tr>
+                            <th>Member</th>
+                            <th>Performances</th>
+                            <th>Evaluations</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for member in members %}
+                            <tr>
+                                <td class="align-middle"><a href="#">{{ member.get_full_name }}</a></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                                <td class="align-middle"><p class="text_muted">0</p></td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <div class="card-footer">
+                    <p><a href="{% url 'club_member_roster' club.id %}">See full roster</a></p>
+                </div>
+            </div>
+        </div>
     </div>
     <div class="row">
-        <div class="col-md-4">Organizer: {{club.organizer.get_full_name}}</div>
-    </div>
-    <div class="row">
-        <a href="{% url 'meeting_list' club.id %}">Meetings</a>
+        <div class="col-md-8">
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Participation Leaderboard</h4>
+                <div class="card-body">
+                    <p>Work in Progress.</p>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card" style="margin-top:25px">
+                <h4 class="card-header text-white bg-dark">Contact</h4>
+                <div class="card-body">
+                    <p>Organizer: {{club.organizer.get_full_name}}</p>
+                    <p>Email: {{club.organizer.email}}</p>
+                </div>
+            </div>
+        </div>
+
     </div>
 {% endblock %}
