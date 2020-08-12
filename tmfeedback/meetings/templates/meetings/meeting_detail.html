@@ -7,34 +7,55 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">Meetings</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">Club: {{club.name}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">All Meetings</a></li>
   <li class="breadcrumb-item active">{{meeting}}</li>
 {% endblock %}
 
 {% block content %}
-
   <div class="row">
-    <h3 class="col-md-12">Performances</h3>
-    <table class="table">
-      <thead class="thead-inverse">
-        <tr>
-          <th>Performance</th>
-          <th>Evaluations</th>
-        </tr>
-      </thead>
-      <tbody>
-        {% for perf in performances %}
-          <tr>
-            <td class="align-middle"><a href="{% url 'performance_detail' club.id meeting.pk perf.pk %}">{{ perf }}</a></td>
-            <td class="align-middle"><p class="text_muted">0</p></td>
-          </tr>
-        {% endfor %}
-      </tbody>
-    </table>
+    <div class="card" style="margin-top:25px">
+      <h3 class="card-header text-white bg-dark">Meeting: {{ meeting }}</h3>
+      <div class="card-body">
+        <p>Date: {{meeting.date}}</p>
+        <p>Theme: {{meeting.theme}}</p>
+      </div>
+    </div>
   </div>
   <div class="row">
-    <div class="col-md-4">Other stuff</div>
+    <div class="card" style="margin-top:25px">
+      <h4 class="card-header text-white bg-dark">Performances</h4>
+      <div class="card-body">
+        <table class="table">
+          <thead class="thead-inverse">
+            <tr>
+              <th>Performer</th>
+              <th>Role</th>
+              <th>Title</th>
+              <th>Evaluations</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for perf in performances %}
+              <tr>
+                <td><a href="{% url 'performance_detail' club.id meeting.pk perf.pk %}">
+                    {{ perf.performer.get_full_name }}
+                  </a>
+                </td>
+                <td>{{ perf.get_role_label }}</td>
+                <td>Title</td>
+                <td>0</td>
+                <td class="align-middle">
+                  <a href="#" class="btn btn-success">Evaluate</a>
+                  <a href="#">Edit</a>
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+        <a href="#" class="btn btn-primary" style="margin-top:10px">Add Performance</a>
+      </div>
+    </div>
   </div>
-
 {% endblock %}
