@@ -7,7 +7,6 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
   <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
   <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">Meetings</a></li>
   <li class="breadcrumb-item active">{{meeting}}</li>
@@ -16,7 +15,23 @@
 {% block content %}
 
   <div class="row">
-    <div class="col-md-12">Performances</div>
+    <h3 class="col-md-12">Performances</h3>
+    <table class="table">
+      <thead class="thead-inverse">
+        <tr>
+          <th>Performance</th>
+          <th>Evaluations</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for perf in performances %}
+          <tr>
+            <td class="align-middle"><a href="{% url 'performance_detail' club.id meeting.pk perf.pk %}">{{ perf }}</a></td>
+            <td class="align-middle"><p class="text_muted">0</p></td>
+          </tr>
+        {% endfor %}
+      </tbody>
+    </table>
   </div>
   <div class="row">
     <div class="col-md-4">Other stuff</div>

@@ -37,6 +37,7 @@ class MeetingDetailView(DetailView):
         club_id = self.kwargs.get('club_id')
         context = super().get_context_data(**kwargs)
         context['club'] = get_object_or_404(Club, id=club_id)
+        context['performances'] = self.object.performances.all()
         return context
 
 
