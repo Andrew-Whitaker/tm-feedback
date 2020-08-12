@@ -1,6 +1,7 @@
 from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.urls import reverse
 
 from meetings.models import Performance
 
@@ -25,4 +26,14 @@ class Evaluation(models.Model):
             'performer': self.performance.performer
         }
         return 'E{pk}: {evaluator} -> {performer}'.format(**evaluation)
+
+    def get_absolute_url(self):
+        meeting = self.performance.meeting
+        club = meeting.club
+        kwargs = {
+            'club_id': club.id,
+            'meeting_pk': meeting.pk,
+            'perf_pk': self.performance.pk
+        }
+        return reverse('performance_detail', kwargs=kwargs)
 

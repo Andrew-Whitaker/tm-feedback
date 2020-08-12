@@ -13,4 +13,5 @@ urlpatterns = [
     # path('<int:meeting_pk>/delete/', views.MeetingDeleteView.as_view(), name='meeting_delete'),
     path('<int:meeting_pk>/performances/<int:perf_pk>/',
          views.PerformanceDetailView.as_view(), name='performance_detail'),
+    path('<int:meeting_pk>/performances/<int:perf_pk>/evals/', include('evaluations.urls'))
 ]
