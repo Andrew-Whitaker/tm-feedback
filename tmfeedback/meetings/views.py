@@ -75,6 +75,7 @@ class PerformanceDetailView(DetailView):
         context = super().get_context_data(**kwargs)
         context['club'] = get_object_or_404(Club, id=club_id)
         context['meeting'] = get_object_or_404(Meeting, pk=meeting_pk)
+        context['evaluations'] = self.object.evals_received.all()
         return context
 
 

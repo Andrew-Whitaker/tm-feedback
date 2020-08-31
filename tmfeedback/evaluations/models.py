@@ -2,6 +2,7 @@ from django.db import models
 from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.urls import reverse
+from django.utils.text import Truncator
 
 from meetings.models import Performance
 
@@ -36,4 +37,11 @@ class Evaluation(models.Model):
             'perf_pk': self.performance.pk
         }
         return reverse('performance_detail', kwargs=kwargs)
+
+    def get_general_comments(self):
+        general_comments = [('You excelled at', self.you_excelled_at),
+                            ('To work on', self.to_work_on),
+                            ('Challenge yourself by', self.challenge_yourself_by)]
+        return general_comments
+
 
