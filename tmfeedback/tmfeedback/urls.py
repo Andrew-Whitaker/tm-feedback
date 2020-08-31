@@ -28,7 +28,7 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('about/', views.about, name='about'),
     path('boards/', include('boards.urls')),
-    path('clubs/', include('clubs.urls')),
+    path('clubs/', include('clubs.urls', namespace='clubs')),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
 ]

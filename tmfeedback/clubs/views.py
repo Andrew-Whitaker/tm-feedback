@@ -45,9 +45,9 @@ class ClubHomeView(View):
             club = get_object_or_404(Club, pk=club_id)
             club.membership_requests.add(user)
             club.save()
-            return redirect('club_home', club_id=club_id)
+            return redirect('clubs:home', club_id=club_id)
         else:
-            return redirect('club_index')
+            return redirect('clubs:index')
 
 
 class ClubCreateView(LoginRequiredMixin, View):
@@ -80,7 +80,7 @@ class ClubCreationSubmission(TemplateView):
             new_club.organizer = request.user
             new_club.save()
             new_club.add_member(request.user)
-            return redirect('club_home', club_id=new_club.id)
+            return redirect('clubs:home', club_id=new_club.id)
         else:
             return render(request, 'clubs/club_create.html', {'form': form})
 
@@ -157,7 +157,7 @@ class ClubManageRequestsView(LoginRequiredMixin, ClubOrganizerPermissionRequired
                 data = form.cleaned_data
                 self.fulfill_membership_decision(data, user, club)
 
-        return redirect('club_member_roster', club_id=club_id)
+        return redirect('clubs:member_roster', club_id=club_id)
 
     @staticmethod
     def fulfill_membership_decision(form_data, user, club):

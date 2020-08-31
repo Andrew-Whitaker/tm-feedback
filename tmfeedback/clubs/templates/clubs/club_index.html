@@ -8,7 +8,7 @@
   <div class="row row-no-gutters">
     <div class="col-md-2"><p>Don't see your club?</p></div>
     <div class="col-md-1">
-      <a href="{% url 'club_create' %}" class="btn btn-primary">Register Here</a>
+      <a href="{% url 'clubs:create' %}" class="btn btn-primary">Register Here</a>
     </div>
   </div>
 
@@ -25,7 +25,7 @@
       {% for club in clubs %}
         <tr>
           <td>
-            <a href="{% url 'club_home' club.pk %}">{{ club.name }}</a>
+            <a href="{% url 'clubs:home' club.pk %}">{{ club.name }}</a>
           </td>
           <td class="align-middle">{{ club.pk }}</td>
           <td class="align-middle">{{ club.member_count }}</td>
