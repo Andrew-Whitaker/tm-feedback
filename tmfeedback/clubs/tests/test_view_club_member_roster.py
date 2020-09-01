@@ -27,11 +27,15 @@ class ClubMemberRosterTests(TestCase):
         view = resolve('/clubs/{0}/roster/'.format(self.club.id))
         self.assertEquals(view.func.view_class, ClubMemberRoster)
 
-    def test_club_roster_view_contains_nav_links(self):
+    def test_club_roster_view_contains_breadcrumb_links(self):
         home_url = reverse('clubs:home', kwargs={'club_id': self.club.id})
-        index_url = reverse('clubs:index', kwargs={})
         self.assertContains(self.response, 'href="{0}"'.format(home_url))
-        self.assertContains(self.response, 'href="{0}"'.format(index_url))
+
+    def test_club_roster_view_contains_member_nav_links(self):
+        # There should be at least one member in the roster list with a link
+        # to their user profile page
+        self.assertTrue(False, 'Have not created links to user profiles from club roster page.')
+        # TODO: Make a real test once user profiles have been implemented
 
     # def test_club_roster_csrf(self):
     #     self.assertContains(self.response, 'csrfmiddlewaretoken')

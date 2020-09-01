@@ -50,6 +50,18 @@ class ClubCreateViewTests(TestCase):
         self.assertTrue(form.errors)
         self.assertEquals(response.status_code, 200)
 
+    def test_club_create_view_contains_breadcrumb_links(self):
+        url = reverse('clubs:create', kwargs={})
+        response = self.client.get(url)
+        club_index_url = reverse('clubs:index')
+        self.assertContains(response, 'href="{0}"'.format(club_index_url))
+
+    def test_club_create_view_contains_nav_links(self):
+        # There should be a link to access the full member roster
+        # roster_url = reverse('clubs:member_roster', kwargs={'club_id': self.club.id})
+        # self.assertContains(self.response, 'href="{0}"'.format(roster_url))
+        pass
+
 
 class ClubCreateUserRequirements(TestCase):
     def setUp(self):
