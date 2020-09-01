@@ -3,7 +3,8 @@ from django.urls import path, include
 
 from . import views
 
+app_name = 'evals'
 urlpatterns = [
-    # path('', views.MeetingListView.as_view(), name='meeting_list'),
-    path('create/', views.EvalCreateView.as_view(), name='eval_create'),
+    # update
+    # delete
 ]

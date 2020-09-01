@@ -29,6 +29,8 @@ urlpatterns = [
     path('about/', views.about, name='about'),
     path('boards/', include('boards.urls')),
     path('clubs/', include('clubs.urls', namespace='clubs')),
+    path('meetings/', include('meetings.urls', namespace='meetings')),
+    path('evals/', include('evaluations.urls', namespace='evals')),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
 ]
