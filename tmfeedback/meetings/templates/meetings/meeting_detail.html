@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">Club: {{club.name}}</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'meeting_list' club.id %}">All Meetings</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'clubs:home' club.id %}">{{club.name}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'clubs:meeting_index' club.id %}">All Meetings</a></li>
   <li class="breadcrumb-item active">{{meeting}}</li>
 {% endblock %}
 
@@ -39,7 +39,7 @@
           <tbody>
             {% for perf in performances %}
               <tr>
-                <td><a href="{% url 'performance_detail' club.id meeting.pk perf.pk %}">
+                <td><a href="{% url 'meetings:perf_detail' meeting.pk perf.pk %}">
                     {{ perf.performer.get_full_name }}
                   </a>
                 </td>
