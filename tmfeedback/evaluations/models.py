@@ -32,11 +32,9 @@ class Evaluation(models.Model):
         meeting = self.performance.meeting
         club = meeting.club
         kwargs = {
-            'club_id': club.id,
-            'meeting_pk': meeting.pk,
             'perf_pk': self.performance.pk
         }
-        return reverse('performance_detail', kwargs=kwargs)
+        return reverse('performances:detail', kwargs=kwargs)
 
     def get_general_comments(self):
         general_comments = [('You excelled at', self.you_excelled_at),

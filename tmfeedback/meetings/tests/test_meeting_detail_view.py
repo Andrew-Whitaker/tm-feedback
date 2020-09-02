@@ -45,6 +45,11 @@ class MeetingDetailTests(TestCase):
 
     def test_meeting_detail_view_contains_performance_nav_links(self):
         # Should be at least one performance in the performance list
-        perf_detail_url = reverse('meetings:perf_detail', kwargs={'meeting_pk': self.meeting.pk, 'perf_pk': self.perf.pk})
+        perf_detail_url = reverse('performances:detail', kwargs={'perf_pk': self.perf.pk})
         self.assertContains(self.response, 'href="{0}"'.format(perf_detail_url))
+
+    def test_meeting_detail_view_contains_eval_nav_links(self):
+        # Should be at least one performance in the performance list, that means there should be a button to Evaluate
+        create_eval_url = reverse('performances:create_eval', kwargs={'perf_pk': self.perf.pk})
+        self.assertContains(self.response, 'href="{0}"'.format(create_eval_url))
 

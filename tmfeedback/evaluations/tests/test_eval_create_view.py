@@ -13,19 +13,28 @@ class EvalCreateViewTest(EvaluationTestBase):
         super().setUp()
         self.client.login(username='john', password='12345678')
         url_path_kwargs = {
-            'club_id': self.club.id,
-            'meeting_pk': self.meeting.pk,
             'perf_pk': self.performance.pk
         }
-        self.url = reverse('eval_create', kwargs=url_path_kwargs)
+        self.url = reverse('performances:create_eval', kwargs=url_path_kwargs)
+        self.response = self.client.get(self.url)
 
     def test_eval_create_view_success_status_code(self):
-        response = self.client.get(self.url)
-        self.assertEquals(response.status_code, 200)
+        self.assertEquals(self.response.status_code, 200)
 
     def test_eval_create_view_not_found_status_code(self):
-        bad_url = reverse('eval_create', kwargs={'club_id': self.club.id,
-                                                 'meeting_pk': self.meeting.pk,
-                                                 'perf_pk': 999})
+        bad_url = reverse('performances:create_eval', kwargs={'perf_pk': 999})
         response = self.client.get(bad_url)
         self.assertEquals(response.status_code, 404)
+
+    def test_perf_detail_view_contains_breadcrumb_links(self):
+        # Page should have breadcrumb link back to their club home page
+        club_home_url = reverse('clubs:home', kwargs={'club_id': self.club.id})
+        self.assertContains(self.response, 'href="{0}"'.format(club_home_url))
+
+        # page should have breadcrumb link back to the meeting detail of that performance
+        meeting_detail_url = reverse('meetings:detail', kwargs={'meeting_pk': self.meeting.pk})
+        self.assertContains(self.response, 'href="{0}"'.format(meeting_detail_url))
+
+        # page should have breadcrumb back to performance detail
+        perf_detail_url = reverse('performances:detail', kwargs={'perf_pk': self.performance.pk})
+        self.assertContains(self.response, 'href="{0}"'.format(perf_detail_url))

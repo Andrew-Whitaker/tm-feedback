@@ -39,7 +39,7 @@
           <tbody>
             {% for perf in performances %}
               <tr>
-                <td><a href="{% url 'meetings:perf_detail' meeting.pk perf.pk %}">
+                <td><a href="{% url 'performances:detail' perf.pk %}">
                     {{ perf.performer.get_full_name }}
                   </a>
                 </td>
@@ -47,7 +47,7 @@
                 <td>Title</td>
                 <td>0</td>
                 <td class="align-middle">
-                  <a href="#" class="btn btn-success">Evaluate</a>
+                  <a href="{% url 'performances:create_eval' perf.pk %}" class="btn btn-success">Evaluate</a>
                   <a href="#">Edit</a>
                 </td>
               </tr>

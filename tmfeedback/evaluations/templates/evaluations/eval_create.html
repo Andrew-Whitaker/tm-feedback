@@ -7,10 +7,12 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'meeting_detail' club.id  meeting.pk %}">{{meeting}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'clubs:home' club.id %}">{{club.name}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meetings:detail' meeting.pk %}">{{meeting}}</a></li>
   <li class="breadcrumb-item">
-    <a href="{% url 'performance_detail' club.id meeting.pk performance.pk %}">{{ performance }}</a>
+    <a href="{% url 'performances:detail' performance.pk %}">
+      {{performance.get_role_label}}: {{performance.performer.get_full_name}}
+    </a>
   </li>
   <li class="breadcrumb-item active">New Evaluation</li>
 {% endblock %}

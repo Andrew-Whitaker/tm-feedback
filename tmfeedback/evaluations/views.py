@@ -19,12 +19,13 @@ class EvalCreateView(CreateView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        club_id = self.kwargs.get('club_id')
-        meeting_pk = self.kwargs.get('meeting_pk')
         perf_pk = self.kwargs.get('perf_pk')
+        perf = get_object_or_404(Performance, pk=perf_pk)
+        meeting = perf.meeting
+        club = meeting.club
         context = super().get_context_data(**kwargs)
-        context['club'] = get_object_or_404(Club, id=club_id)
-        context['meeting'] = get_object_or_404(Meeting, pk=meeting_pk)
-        context['performance'] = get_object_or_404(Performance, pk=perf_pk)
+        context['club'] = club
+        context['meeting'] = meeting
+        context['performance'] = perf
         return context
 
