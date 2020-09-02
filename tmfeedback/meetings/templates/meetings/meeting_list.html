@@ -5,13 +5,13 @@
 {% endblock %}
 
 {% block breadcrumb %}
-    <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}} - {{club.id}}</a></li>
-    <li class="breadcrumb-item active">Meetings</li>
+    <li class="breadcrumb-item"><a href="{% url 'clubs:home' club.id %}">{{club.name}}</a></li>
+    <li class="breadcrumb-item active">All Meetings</li>
 {% endblock %}
 
 {% block content %}
     <div class="mb-4">
-        <a href="{% url 'meeting_create' club.id %}" class="btn btn-primary">New Meeting</a>
+        <a href="{% url 'clubs:create_meeting' club.id %}" class="btn btn-primary">New Meeting</a>
     </div>
 
     <table class="table">
@@ -26,7 +26,7 @@
             {% for meeting in meetings %}
                 <tr>
                     <td class="align-middle">{{ meeting.date }}</td>
-                    <td class="align-middle"><a href="{% url 'meeting_detail' club.id meeting.pk %}">{{ meeting.theme }}</a></td>
+                    <td class="align-middle"><a href="{% url 'meetings:detail' meeting.pk %}">{{ meeting.theme }}</a></td>
                     <td class="align-middle"><p class="text_muted">Thirteen</p></td>
                     <td class="align-middle"><a href="#">Edit</a></td>
                 </tr>

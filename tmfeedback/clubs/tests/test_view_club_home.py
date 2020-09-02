@@ -46,7 +46,6 @@ class ClubHomeTests(TestCase):
         meeting_detail_url = reverse('meetings:detail', kwargs={'meeting_pk': 1})
         self.assertContains(self.response, 'href="{0}"'.format(meeting_detail_url))
 
-
     def test_club_home_view_contains_member_nav_links(self):
         # There should be a link to access the full member roster
         roster_url = reverse('clubs:member_roster', kwargs={'club_id': self.club.id})
