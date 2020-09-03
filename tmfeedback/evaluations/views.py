@@ -1,14 +1,16 @@
 from django.shortcuts import render, get_object_or_404
 from django.contrib.auth import get_user_model
 from django.views.generic import CreateView
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from .models import Evaluation
 from .forms import EvalCreationForm
 from clubs.models import Club
+from clubs.views import ClubMemberPermissionRequiredMixin
 from meetings.models import Meeting, Performance
 
 
-class EvalCreateView(CreateView):
+class EvalCreateView(LoginRequiredMixin, CreateView):
     template_name = 'evaluations/eval_create.html'
     form_class = EvalCreationForm
 
