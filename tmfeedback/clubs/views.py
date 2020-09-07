@@ -13,6 +13,43 @@ from .models import Club
 from .forms import MembershipRequestForm, MembershipApprovalForm, create_membership_request_formset, ClubModelForm
 
 
+class ClubOrganizerRequiredMixin(UserPassesTestMixin):
+    """ Mixin that enforces the request's user be the organizer for a particular club.
+    This mixin assumes that:
+        1) kwargs is a member variable of self
+        2) the key 'club_id' exists in kwargs
+        3) request is a member variable of self
+    Should always be used after LoginRequiredMixin.
+    """
+    def test_func(self):
+        club = self.get_club()
+        user = self.request.user
+        return Club.objects.filter(id=club.id, organizer=user).exists()
+
+    def get_club(self):
+        return get_object_or_404(Club, pk=self.kwargs['club_id'])
+
+
+class ClubMembershipRequiredMixin(UserPassesTestMixin):
+    """ Mixin that enforces the request's user be the organizer for a particular club.
+    This mixin assumes that:
+        1) kwargs is a member variable of self
+        2) the key 'club_id' exists in kwargs
+        3) request is a member variable of self
+    Should always be used after LoginRequiredMixin.
+
+    Can override get_club method to use this mixin for views that do not have 'club_id'
+    in its kwargs. Allows extendability for any circumstance in which a club can be found.
+    """
+    def test_func(self):
+        club = self.get_club()
+        user = self.request.user
+        return club.has_member(user)
+
+    def get_club(self):
+        return get_object_or_404(Club, pk=self.kwargs['club_id'])
+
+
 class ClubIndexView(ListView):
     model = Club
     context_object_name = 'clubs'
@@ -102,35 +139,7 @@ class ClubMemberRoster(LoginRequiredMixin, ListView):
         return queryset
 
 
-class ClubOrganizerPermissionRequiredMixin(UserPassesTestMixin):
-    """ Mixin that enforces the request's user be the organizer for a particular club.
-    This mixin assumes that:
-        1) kwargs is a member variable of self
-        2) the key 'club_id' exists in kwargs
-        3) request is a member variable of self
-    Should always be used after LoginRequiredMixin.
-    """
-    def test_func(self):
-        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
-        user = self.request.user
-        return Club.objects.filter(id=club.id, organizer=user).exists()
-
-
-class ClubMemberPermissionRequiredMixin(UserPassesTestMixin):
-    """ Mixin that enforces the request's user be the organizer for a particular club.
-    This mixin assumes that:
-        1) kwargs is a member variable of self
-        2) the key 'club_id' exists in kwargs
-        3) request is a member variable of self
-    Should always be used after LoginRequiredMixin.
-    """
-    def test_func(self):
-        club = get_object_or_404(Club, pk=self.kwargs['club_id'])
-        user = self.request.user
-        return club.has_member(user)
-
-
-class ClubManageRequestsView(LoginRequiredMixin, ClubOrganizerPermissionRequiredMixin, View):
+class ClubManageRequestsView(LoginRequiredMixin, ClubOrganizerRequiredMixin, View):
 
     def get(self, request, club_id):
         club = get_object_or_404(Club, pk=club_id)

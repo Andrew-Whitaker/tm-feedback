@@ -6,7 +6,7 @@ import sys
 from .models import Meeting, Performance
 from .forms import MeetingCreationForm
 from clubs.models import Club
-from clubs.views import ClubMemberPermissionRequiredMixin, ClubOrganizerPermissionRequiredMixin
+from clubs.views import ClubMembershipRequiredMixin, ClubOrganizerRequiredMixin
 
 
 class MeetingListView(ListView):
@@ -40,7 +40,7 @@ class MeetingDetailView(DetailView):
         return context
 
 
-class MeetingCreateView(LoginRequiredMixin, ClubMemberPermissionRequiredMixin, CreateView):
+class MeetingCreateView(LoginRequiredMixin, ClubMembershipRequiredMixin, CreateView):
     template_name = 'meetings/meeting_create.html'
     # TODO: specify a form_class to add extra validation so that clubs can't have multiple meetings with the same date
     form_class = MeetingCreationForm
