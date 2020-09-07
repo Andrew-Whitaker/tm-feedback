@@ -6,7 +6,7 @@ import sys
 from .models import Meeting, Performance
 from .forms import MeetingCreationForm
 from clubs.models import Club
-from clubs.views import ClubMemberPermissionRequiredMixin, ClubOrganizerPermissionRequiredMixin
+from clubs.views import ClubMembershipRequiredMixin, ClubOrganizerRequiredMixin
 
 
 class MeetingListView(ListView):
@@ -34,13 +34,13 @@ class MeetingDetailView(DetailView):
         return get_object_or_404(Meeting, pk=meeting_pk)
 
     def get_context_data(self, **kwargs):
-        club_id = self.kwargs.get('club_id')
         context = super().get_context_data(**kwargs)
-        context['club'] = get_object_or_404(Club, id=club_id)
+        context['club'] = self.object.club
+        context['performances'] = self.object.performances.all()
         return context
 
 
-class MeetingCreateView(LoginRequiredMixin, ClubMemberPermissionRequiredMixin, CreateView):
+class MeetingCreateView(LoginRequiredMixin, ClubMembershipRequiredMixin, CreateView):
     template_name = 'meetings/meeting_create.html'
     # TODO: specify a form_class to add extra validation so that clubs can't have multiple meetings with the same date
     form_class = MeetingCreationForm
@@ -68,12 +68,11 @@ class PerformanceDetailView(DetailView):
         return get_object_or_404(Performance, pk=perf_pk)
 
     def get_context_data(self, **kwargs):
-        club_id = self.kwargs.get('club_id')
-        meeting_pk = self.kwargs.get('meeting_pk')
-
+        meeting = self.object.meeting
         context = super().get_context_data(**kwargs)
-        context['club'] = get_object_or_404(Club, id=club_id)
-        context['meeting'] = get_object_or_404(Meeting, pk=meeting_pk)
+        context['club'] = meeting.club
+        context['meeting'] = meeting
+        context['evaluations'] = self.object.evals_received.all()
         return context
 
 

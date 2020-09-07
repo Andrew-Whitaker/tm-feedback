@@ -10,7 +10,7 @@ class ClubIndexTests(TestCase):
     def setUp(self):
         user = get_user_model().objects.create(username='john', password='12345678')
         self.club = Club.objects.create(name='Test', id=1, description='Test board', organizer=user)
-        url = reverse('club_index')
+        url = reverse('clubs:index')
         self.response = self.client.get(url)
 
     def test_club_index_view_status_code(self):
@@ -21,5 +21,10 @@ class ClubIndexTests(TestCase):
         self.assertEquals(view.func.view_class, ClubIndexView)
 
     def test_club_index_view_contains_nav_links(self):
-        club_url = reverse('club_home', kwargs={'club_id': self.club.id})
-        self.assertContains(self.response, 'href="{0}"'.format(club_url))
+        # should exist at least one club in the list with a link to the home page
+        club_home_url = reverse('clubs:home', kwargs={'club_id': self.club.id})
+        self.assertContains(self.response, 'href="{0}"'.format(club_home_url))
+
+        # should exist a button that redirects to club creation page
+        club_creation_url = reverse('clubs:create')
+        self.assertContains(self.response, 'href="{0}"'.format(club_creation_url))

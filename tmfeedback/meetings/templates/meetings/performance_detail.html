@@ -3,22 +3,50 @@
 {% load static %}
 
 {% block title %}
-  {{meeting}}
+  {{performance.get_role_label}}: {{performance.performer.get_full_name}}
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_home' club.id %}">{{club.name}}</a></li>
-  <li class="breadcrumb-item"><a href="{% url 'meeting_detail' club.id meeting.pk %}">{{meeting}}</a></li>
-  <li class="breadcrumb-item active">{{performance}}</li>
+  <li class="breadcrumb-item"><a href="{% url 'clubs:home' club.id %}">{{club.name}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meetings:detail' meeting.pk %}">{{meeting}}</a></li>
+  <li class="breadcrumb-item active">
+    {{performance.get_role_label}}: {{performance.performer.get_full_name}}
+  </li>
 {% endblock %}
 
 {% block content %}
 
   <div class="row">
-    <div class="col-md-12">Evaluations</div>
+    <div class="card" style="margin-top:25px">
+      <h3 class="card-header text-white bg-dark">Performance</h3>
+      <div class="card-body">
+        <p>Member: {{performance.performer.get_full_name}}</p>
+        <p>Role: {{performance.get_role_label}}</p>
+        <p class="text-muted">Title: Not Implemented yet.</p>
+        <a href="{% url 'performances:create_eval' performance.pk%}"
+           class="btn btn-primary" style="margin-top:10px">
+          Evaluate
+        </a>
+      </div>
+    </div>
   </div>
   <div class="row">
-    <div class="col-md-4">Other stuff</div>
+    <div class="card" style="margin-top:25px">
+      <h4 class="card-header text-white bg-dark">Evaluations</h4>
+      <ul class="list-group list-group-flush">
+        {% for eval in evaluations %}
+          <li class="list-group-item">
+            <p>Evaluator: {{ eval.evaluator.get_full_name }}
+              <a href="#" class="btn btn-primary" style="margin-left:300px">Edit</a>
+              <a href="#" style="margin-left:25px">See full evaluation</a>
+            </p>
+            {% for category, comment in eval.get_general_comments %}
+              <div>{{ category }}: {{ comment }}</div>
+            {% endfor %}
+          </li>
+        {% endfor %}
+      </ul>
+    </div>
   </div>
 
 {% endblock %}

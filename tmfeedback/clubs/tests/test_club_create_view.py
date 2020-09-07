@@ -16,17 +16,17 @@ class ClubCreateViewTests(TestCase):
         self.client.login(username='john', password='12345678')
 
     def test_club_create_view_success_status_code(self):
-        url = reverse('club_create', kwargs={})
+        url = reverse('clubs:create', kwargs={})
         response = self.client.get(url)
         self.assertEquals(response.status_code, 200)
 
     def test_csrf(self):
-        url = reverse('club_create', kwargs={})
+        url = reverse('clubs:create', kwargs={})
         response = self.client.get(url)
         self.assertContains(response, 'csrfmiddlewaretoken')
 
     def test_new_club_valid_post_data(self):
-        url = reverse('club_create', kwargs={})
+        url = reverse('clubs:create', kwargs={})
         data = {
             'name': 'Pushing the Envelope',
             'id': 55,
@@ -43,13 +43,24 @@ class ClubCreateViewTests(TestCase):
         club = Club.objects.get(id=55)
         self.assertEquals(club.organizer, self.user)
 
-
     def test_new_club_invalid_post_data(self):
-        url = reverse('club_create', kwargs={})
+        url = reverse('clubs:create', kwargs={})
         response = self.client.post(url, {})
         form = response.context.get('form')
         self.assertTrue(form.errors)
         self.assertEquals(response.status_code, 200)
+
+    def test_club_create_view_contains_breadcrumb_links(self):
+        url = reverse('clubs:create', kwargs={})
+        response = self.client.get(url)
+        club_index_url = reverse('clubs:index')
+        self.assertContains(response, 'href="{0}"'.format(club_index_url))
+
+    def test_club_create_view_contains_nav_links(self):
+        # There should be a link to access the full member roster
+        # roster_url = reverse('clubs:member_roster', kwargs={'club_id': self.club.id})
+        # self.assertContains(self.response, 'href="{0}"'.format(roster_url))
+        pass
 
 
 class ClubCreateUserRequirements(TestCase):
@@ -57,7 +68,7 @@ class ClubCreateUserRequirements(TestCase):
         self.user = get_user_model().objects.create_user(username='john', email='john@doe.com')
         self.user.set_password('12345678')
         self.user.save()
-        self.url = reverse('club_create', kwargs={})
+        self.url = reverse('clubs:create', kwargs={})
 
     def test_login_required(self):
         response = self.client.get(self.url)

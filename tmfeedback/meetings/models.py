@@ -18,10 +18,9 @@ class Meeting(models.Model):
 
     def get_absolute_url(self):
         kwargs = {
-            'club_id': self.club.id,
             'meeting_pk': self.pk
         }
-        return reverse('meeting_detail', kwargs=kwargs)
+        return reverse('meetings:detail', kwargs=kwargs)
 
 
 def get_default_user():
@@ -31,7 +30,8 @@ def get_default_user():
 class Performance(models.Model):
     meeting = models.ForeignKey(Meeting, on_delete=models.CASCADE, related_name='performances')
     performer = models.ForeignKey(settings.AUTH_USER_MODEL,
-                                  on_delete=models.SET(get_default_user))
+                                  on_delete=models.SET(get_default_user),
+                                  related_name='performances')
 
     # Performance Roles
     class Role(models.TextChoices):
@@ -51,4 +51,11 @@ class Performance(models.Model):
 
     def get_role_label(self):
         return self.Role(self.role).label
+
+    def get_absolute_url(self):
+        kwargs = {
+            'meeting_pk': self.meeting.pk,
+            'perf_pk': self.pk
+        }
+        return reverse('meetings:perf_detail', kwargs=kwargs)
 

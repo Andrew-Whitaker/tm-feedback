@@ -12,14 +12,14 @@ class ClubMemberRosterTests(TestCase):
         self.user = get_user_model().objects.create_user(username='john', email='john@doe.com', password='12345678')
         self.club.members.add(self.user)
         self.client.login(username='john', password='12345678')
-        self.url = reverse('club_member_roster', kwargs={'club_id': self.club.id})
+        self.url = reverse('clubs:member_roster', kwargs={'club_id': self.club.id})
         self.response = self.client.get(self.url)
 
     def test_club_roster_view_success_status_code(self):
         self.assertEquals(self.response.status_code, 200)
 
     def test_club_roster_view_not_found_status_code(self):
-        bad_url = reverse('club_member_roster', kwargs={'club_id': 13})
+        bad_url = reverse('clubs:member_roster', kwargs={'club_id': 13})
         response = self.client.get(bad_url)
         self.assertEquals(response.status_code, 404)
 
@@ -27,11 +27,15 @@ class ClubMemberRosterTests(TestCase):
         view = resolve('/clubs/{0}/roster/'.format(self.club.id))
         self.assertEquals(view.func.view_class, ClubMemberRoster)
 
-    def test_club_roster_view_contains_nav_links(self):
-        home_url = reverse('club_home', kwargs={'club_id': self.club.id})
-        index_url = reverse('club_index', kwargs={})
+    def test_club_roster_view_contains_breadcrumb_links(self):
+        home_url = reverse('clubs:home', kwargs={'club_id': self.club.id})
         self.assertContains(self.response, 'href="{0}"'.format(home_url))
-        self.assertContains(self.response, 'href="{0}"'.format(index_url))
+
+    def test_club_roster_view_contains_member_nav_links(self):
+        # There should be at least one member in the roster list with a link
+        # to their user profile page
+        self.assertTrue(False, 'Have not created links to user profiles from club roster page.')
+        # TODO: Make a real test once user profiles have been implemented
 
     # def test_club_roster_csrf(self):
     #     self.assertContains(self.response, 'csrfmiddlewaretoken')
@@ -42,7 +46,7 @@ class LoginRequiredRosterTests(TestCase):
         self.club = Club.objects.create(name='Test Club', id=1, description='Club for testing')
         self.user = get_user_model().objects.create_user(username='john', email='john@doe.com', password='12345678')
         self.club.members.add(self.user)
-        self.url = reverse('club_member_roster', kwargs={'club_id': self.club.id})
+        self.url = reverse('clubs:member_roster', kwargs={'club_id': self.club.id})
         self.response = self.client.get(self.url)
 
     def test_redirection(self):

@@ -28,7 +28,10 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
     path('about/', views.about, name='about'),
     path('boards/', include('boards.urls')),
-    path('clubs/', include('clubs.urls')),
+    path('clubs/', include('clubs.urls', namespace='clubs')),
+    path('meetings/', include('meetings.urls.meetings', namespace='meetings')),
+    path('performances/', include('meetings.urls.performances', namespace='performances')),
+    path('evals/', include('evaluations.urls', namespace='evals')),
     path('users/', include('users.urls')),
     path('admin/', admin.site.urls),
 ]

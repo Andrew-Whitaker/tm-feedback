@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block title %}
+  Evaluate
+{% endblock %}
+
+{% block breadcrumb %}
+  <li class="breadcrumb-item"><a href="{% url 'clubs:home' club.id %}">{{club.name}}</a></li>
+  <li class="breadcrumb-item"><a href="{% url 'meetings:detail' meeting.pk %}">{{meeting}}</a></li>
+  <li class="breadcrumb-item">
+    <a href="{% url 'performances:detail' performance.pk %}">
+      {{performance.get_role_label}}: {{performance.performer.get_full_name}}
+    </a>
+  </li>
+  <li class="breadcrumb-item active">New Evaluation</li>
+{% endblock %}
+
+{% block content %}
+  <form method="post" novalidate>
+    {% csrf_token %}
+    {% include 'includes/form.html' %}
+    <button type="submit" class="btn btn-success">Submit Evaluation</button>
+  </form>
+{% endblock %}

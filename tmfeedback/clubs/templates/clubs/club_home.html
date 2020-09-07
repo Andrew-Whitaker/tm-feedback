@@ -7,8 +7,8 @@
 {% endblock %}
 
 {% block breadcrumb %}
-  <li class="breadcrumb-item"><a href="{% url 'club_index' %}">Clubs</a></li>
-  <li class="breadcrumb-item active">{{club.name}} - {{club.id}}</li>
+  <li class="breadcrumb-item"><a href="{% url 'clubs:index' %}">Clubs</a></li>
+  <li class="breadcrumb-item active">{{club.name}}</li>
 {% endblock %}
 
 {% block content %}
@@ -29,7 +29,7 @@
                             {% elif has_pending_membership %}
                                 <button type="button" class="btn btn-info float-right" disabled>Pending Approval</button>
                             {% else %}
-                                <form action="{% url 'club_home' club.id %}" method="post" class="form-inline ml-auto">
+                                <form action="{% url 'clubs:home' club.id %}" method="post" class="form-inline ml-auto">
                                     {% csrf_token %}
                                     <button type="submit" class="btn btn-primary float-right">Request Membership</button>
                                 </form>
@@ -69,15 +69,15 @@
                     <tbody>
                         {% for meeting in meetings %}
                             <tr>
-                                <td class="align-middle"><a href="{% url 'meeting_detail' club.id meeting.pk %}">{{ meeting }}</a></td>
+                                <td class="align-middle"><a href="{% url 'meetings:detail' meeting.pk %}">{{ meeting }}</a></td>
                                 <td class="align-middle"><p class="text_muted">0</p></td>
                             </tr>
                         {% endfor %}
                     </tbody>
                 </table>
                 <div class="card-footer">
-                    <p><a href="{% url 'meeting_list' club.id %}">Go to all meetings</a> or
-                        <a href="{% url 'meeting_create' club.id %}">Create a new meeting</a></p>
+                    <p><a href="{% url 'clubs:meeting_index' club.id %}">Go to all meetings</a> or
+                        <a href="{% url 'clubs:create_meeting' club.id %}">Create a new meeting</a></p>
                 </div>
             </div>
         </div>
@@ -103,7 +103,7 @@
                     </tbody>
                 </table>
                 <div class="card-footer">
-                    <p><a href="{% url 'club_member_roster' club.id %}">See full roster</a></p>
+                    <p><a href="{% url 'clubs:member_roster' club.id %}">See full roster</a></p>
                 </div>
             </div>
         </div>
